@@ -1,0 +1,1 @@
+docker build -t dirichlet/ocaml .docker run -i -t dirichlet/ocaml /bin/bash
