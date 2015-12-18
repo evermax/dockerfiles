@@ -9,8 +9,9 @@ Now:
  - netbeans
  - maven
  - simple tmux - git - vim setup
+ - glassfish
 
 Soon:
 
  - go
- - glassfish
+ - better glassfish
