@@ -21,7 +21,7 @@ Then you do a `docker-compose up` and the magic should happend.
 
 ## What next?
 
-Well, nginx should be separated from the LRS itself so that it is way easier to tweak.
+Well, nginx should perhaps be separated from the LRS itself so that it is way easier to tweak.
 So this will be the next step before the project is really proper. This is quite a good explaination on the [official repo](https://hub.docker.com/_/nginx/) on how to have it play well with docker compose.
 
 The main issue that I see with having it in a different container is that it seem harder to cache static files. (But you should use the api more that anything else anyway.)
