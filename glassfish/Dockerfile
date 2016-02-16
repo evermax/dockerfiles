@@ -2,7 +2,6 @@
 FROM glassfish:latest
 
 COPY start.sh /
-COPY ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 EXPOSE 8080
 
