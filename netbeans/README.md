@@ -51,6 +51,6 @@ Tools > Plugins > Settings tab
 Then in the `Advanced` section of the Settings tab, select `Force install into user directory` in the `Plugin Install Location` selectbox.
 
 
+To be able to use alt for shortcuts in NetBeans with xQuartz on Mac, I followed this [doc](https://xquartz.macosforge.org/trac/wiki/KeyboardMapping) from the xQuartz project.
 
-For some reasons on Mac, I didn't managed to make the `Alt+Shift` shortcut works.
-So if you are used to use the `Alt+Shift+O` shortcut to `Go to File...` I would advice to change it to something like `Ctrl+Shift+O`. (You'll have then to change the `Open Project...` shortcut but my guess is that it won't be used as often)
+As you can see in my [configuration](https://github.com/evermax/dotfiles/blob/master/.Xmodmap) I chose to use the mixed version of the solution : the left alt for shortcups and the right one for special characters (otherwise I wasn't able to do things like `{}` on my french Keyboard)
