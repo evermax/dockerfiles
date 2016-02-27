@@ -1,22 +1,24 @@
-lrs:
-    build: .
-    ports:
-        - "8080:8080"
-    links:
-        - postgres
-        - rabbitmq
-    env_file:
-        - lrs.env
-        - psql.env
-        - rabbitmq.env
+version: '2'
+services:
+  lrs:
+      build: .
+      ports:
+          - "8080:8080"
+      links:
+          - postgres
+          - rabbitmq
+      env_file:
+          - lrs.env
+          - psql.env
+          - rabbitmq.env
 
-postgres:
-    image: postgres
-    env_file: psql.env
-    volumes_from:
-        - psql_data
+  postgres:
+      image: postgres
+      env_file: psql.env
+      volumes_from:
+          - psql_data
 
-rabbitmq:
-    image: rabbitmq:3.6
-    env_file: rabbitmq.env
-    privileged: true
+  rabbitmq:
+      image: rabbitmq:3.6
+      env_file: rabbitmq.env
+      privileged: true

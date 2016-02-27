@@ -20,8 +20,6 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-PSQL_HOST=getenv('POSTGRES_PORT_5432_TCP_ADDR')
-PSQL_PORT=getenv('POSTGRES_PORT_5432_TCP_PORT')
 PSQL_USER=getenv('POSTGRES_USER')
 PSQL_PWD=getenv('POSTGRES_PASSWORD')
 
@@ -31,8 +29,8 @@ DATABASES = {
         'NAME': 'lrs',
         'USER': PSQL_USER,
         'PASSWORD': PSQL_PWD,
-        'HOST': PSQL_HOST,
-        'PORT': PSQL_PORT,
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
 

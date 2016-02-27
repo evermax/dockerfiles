@@ -9,10 +9,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'adl_lrs.settings')
 
 RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER')
 RABBITMQ_PWD = os.getenv('RABBITMQ_DEFAULT_PASS')
-RABBITMQ_ADDR = os.getenv('RABBITMQ_PORT_5672_TCP_ADDR')
-RABBITMQ_PORT = os.getenv('RABBITMQ_PORT_5672_TCP_PORT')
 
-RABBITMQ_URL = 'amqp://' + RABBITMQ_USER + ':' + RABBITMQ_PWD + '@' + RABBITMQ_ADDR + ':' + RABBITMQ_PORT + '/'
+RABBITMQ_URL = 'amqp://' + RABBITMQ_USER + ':' + RABBITMQ_PWD + '@rabbitmq:5672/'
 
 from django.conf import settings
 
