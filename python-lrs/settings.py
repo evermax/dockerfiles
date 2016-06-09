@@ -52,10 +52,10 @@ LANGUAGE_CODE = 'en-US'
 # content for multiple sites.
 SITE_ID = 1
 SITE_SCHEME = 'http'
-SITE_DOMAIN = 'lrs:8080'
+SITE_DOMAIN = 'localhost:8000'
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = False
+USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
@@ -63,6 +63,9 @@ USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
+
+# Set this to True if you would like to utilize the webhooks functionality
+USE_HOOKS = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -138,11 +141,11 @@ OAUTH_SCOPES = (
         (ALL,'all')
     )
 
-SESSION_KEY = 'oauth2'
-
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED=True
+CELERY_IGNORE_RESULT=True
 
 # Limit on number of statements the server will return
 SERVER_STMT_LIMIT = 100
@@ -160,7 +163,7 @@ CACHES = {
     'attachment_cache':{
         'BACKEND':'django.core.cache.backends.db.DatabaseCache',
         'LOCATION':'attachment_cache',
-        'TIMEOUT': 86400,
+        'TIMEOUT': 86400,        
     },
 }
 
@@ -172,31 +175,67 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = getenv('LRS_SECRET_KEY')
+SECRET_KEY = 'v+m%^r0x)$_x8i3trn*duc6vd-yju0kx2b#9lk0sn2k^7cgyp5'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            # insert your TEMPLATE_DIRS here
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.request',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+USE_ETAGS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = (
+    'HEAD',
+    'POST',
+    'GET',
+    'OPTIONS',
+    'DELETE',
+    'PUT'
 )
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.request",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages"
+CORS_ALLOW_HEADERS = (
+    'Content-Type',
+    'Content-Length',
+    'Authorization',
+    'If-Match',
+    'If-None-Match',
+    'X-Experience-API-Version',
+    'Accept-Language'
+)
+CORS_EXPOSE_HEADERS = (
+    'ETag',
+    'Last-Modified',
+    'Cache-Control',
+    'Content-Type',
+    'Content-Length',
+    'WWW-Authenticate',
+    'X-Experience-API-Version',
+    'Accept-Language'
 )
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'adl_lrs.utils.AllowOriginMiddleware.AllowOriginMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -207,33 +246,27 @@ ROOT_URLCONF = 'adl_lrs.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'adl_lrs.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+ADMIN_REGISTER_APPS = ['adl_lrs', 'lrs', 'oauth_provider']
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'adl_lrs',
     'lrs',
     'oauth_provider',
-    'oauth2_provider.provider',
-    'oauth2_provider.provider.oauth2',
     'django.contrib.admin',
-    'django_extensions',
     'jsonify',
-    'south',
-    'endless_pagination',
-)
+    'el_pagination',
+    'corsheaders',
+]
 
 REQUEST_HANDLER_LOG_DIR = path.join(PROJECT_ROOT, 'logs/django_request.log')
 DEFAULT_LOG_DIR = path.join(PROJECT_ROOT, 'logs/lrs.log')
-CELERY_TASKS_LOG_DIR =  path.join(PROJECT_ROOT, 'logs/celery_tasks.log')
+CELERY_TASKS_LOG_DIR =  path.join(PROJECT_ROOT, 'logs/celery/celery_tasks.log')
 
 CELERYD_HIJACK_ROOT_LOGGER = False
 
@@ -243,7 +276,7 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 # django.request logger logs warning and error server requests
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': u'%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
@@ -263,7 +296,7 @@ LOGGING = {
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount': 5,
             'formatter':'standard',
-        },
+        },  
         'request_handler': {
                 'level':'DEBUG',
                 'class':'logging.handlers.RotatingFileHandler',
@@ -279,7 +312,7 @@ LOGGING = {
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount': 5,
             'formatter':'standard',
-        },
+        },        
     },
     'loggers': {
         'lrs': {
@@ -296,6 +329,6 @@ LOGGING = {
             'handlers': ['celery_handler'],
             'level': 'DEBUG',
             'propagate': True
-        },
+        },   
     }
 }
