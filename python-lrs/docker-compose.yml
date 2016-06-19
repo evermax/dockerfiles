@@ -1,7 +1,7 @@
 version: '2'
 services:
   lrs:
-      build: .
+      image: dirichlet/lrs
       ports:
           - "8080:8080"
       links:
@@ -15,10 +15,14 @@ services:
   postgres:
       image: postgres
       env_file: psql.env
-      volumes_from:
-          - psql_data
+      volumes:
+          - psql_data:/var/lib/postgresql/data/pgdata
 
   rabbitmq:
       image: rabbitmq:3.6
       env_file: rabbitmq.env
       privileged: true
+
+volumes:
+  psql_data:
+    driver: local
