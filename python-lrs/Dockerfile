@@ -2,7 +2,7 @@ FROM python:2.7.11
 
 RUN apt-get update; apt-get install git
 
-RUN pip install --upgrade pip; pip install fabric
+RUN pip install --upgrade pip; pip install 'fabric<2.0'
 
 RUN mkdir /workspace; cd /workspace; git clone https://github.com/evermax/ADL_LRS.git
 
